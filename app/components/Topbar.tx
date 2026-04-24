@@ -1,0 +1,627 @@
+'use client';
+
+import { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { 
+  Menu, 
+  X, 
+  ChevronDown, 
+  Home, 
+  Building, 
+  BookOpen, 
+  Shield, 
+  AlertTriangle, 
+  HardHat,
+  Info, 
+  Phone, 
+  UserPlus,
+  GraduationCap,
+  Wrench,
+  Tractor,
+  Star,
+  Users,
+  Award,
+  Target
+} from 'lucide-react';
+
+const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [mobileCoursesOpen, setMobileCoursesOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+
+  // AIE Color Palette
+  const colors = {
+    primary: '#E53E3E', // Vibrant Red
+    secondary: '#3182CE', // Bright Blue
+    accent: '#38A169', // Green
+    yellow: '#D69E2E', // Gold
+    purple: '#805AD5', // Purple
+    orange: '#DD6B20', // Orange
+    dark: '#2D3748', // Dark Gray
+    light: '#F7FAFC', // Light background
+  };
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpenDropdown(null);
+      }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node) && isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMenuOpen]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
+
+  const toggleDropdown = (dropdown: string) => {
+    setOpenDropdown(openDropdown === dropdown ? null : dropdown);
+  };
+
+  const toggleMobileCourses = () => {
+    setMobileCoursesOpen(!mobileCoursesOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMenuOpen(false);
+    setMobileCoursesOpen(false);
+  };
+
+  const courseCategories = {
+    safety: {
+      icon: <Shield className="w-4 h-4" />,
+      title: "Safety Training",
+      color: colors.primary,
+      items: [
+        { name: 'SHE Representative', href: '/courses/she-representative', icon: <Shield className="w-4 h-4" /> },
+        { name: 'First Aid Training', href: '/courses/first-aid-training', icon: <AlertTriangle className="w-4 h-4" /> },
+        { name: 'Fire Fighting', href: '/courses/fire-fighting', icon: <AlertTriangle className="w-4 h-4" /> },
+        { name: 'OHS Training', href: '/courses/ohs-training', icon: <Shield className="w-4 h-4" /> }
+      ]
+    },
+    mining: {
+      icon: <HardHat className="w-4 h-4" />,
+      title: "Mining Safety",
+      color: colors.orange,
+      items: [
+        { name: 'Safety In Mining', href: '/courses/safety-in-mining', icon: <HardHat className="w-4 h-4" /> },
+        { name: 'Mining Equipment', href: '/courses/mining-equipment', icon: <Tractor className="w-4 h-4" /> },
+        { name: 'Underground Safety', href: '/courses/underground-safety', icon: <HardHat className="w-4 h-4" /> }
+      ]
+    },
+    construction: {
+      icon: <Building className="w-4 h-4" />,
+      title: "Construction",
+      color: colors.yellow,
+      items: [
+        { name: 'Construction Safety', href: '/construction', icon: <Building className="w-4 h-4" /> },
+        { name: 'Heavy Equipment', href: '/courses/heavy-equipment', icon: <Tractor className="w-4 h-4" /> },
+        { name: 'Scaffolding', href: '/courses/scaffolding', icon: <Building className="w-4 h-4" /> }
+      ]
+    },
+    dangerous: {
+      icon: <AlertTriangle className="w-4 h-4" />,
+      title: "Dangerous Goods",
+      color: colors.purple,
+      items: [
+        { name: 'Dangerous Goods', href: '/courses/dangerous-goods', icon: <AlertTriangle className="w-4 h-4" /> },
+        { name: 'Hazardous Materials', href: '/courses/hazardous-materials', icon: <AlertTriangle className="w-4 h-4" /> }
+      ]
+    }
+  };
+
+  const allCourses = [
+    { name: 'All Courses', href: '/courses', icon: <BookOpen className="w-4 h-4" />, color: colors.secondary },
+    { name: 'Welding Courses', href: '/courses/welding', icon: <Wrench className="w-4 h-4" />, color: colors.orange },
+    { name: 'Mechanical Training', href: '/courses/mechanical', icon: <Wrench className="w-4 h-4" />, color: colors.yellow },
+    { name: 'Heavy Machinery', href: '/courses/heavy-machinery', icon: <Tractor className="w-4 h-4" />, color: colors.purple }
+  ];
+
+  return (
+    <header className="bg-white shadow-xl sticky top-0 z-50 border-b-4" style={{ borderColor: colors.primary }}>
+      {/* Top Banner */}
+      <div className="bg-gradient-to-r from-red-600 to-orange-500 py-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center text-white text-sm">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-1">
+                <Star className="w-4 h-4 fill-current" />
+                <span>FET Engineering Courses</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Award className="w-4 h-4 fill-current" />
+                <span>Accredited Programs</span>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <span>📞 0692629422</span>
+              <span>✉️ info@skillopportunity.co.za</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" ref={dropdownRef}>
+        <div className="flex justify-between items-center h-20">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-4 group">
+            <div className="relative">
+              <div 
+                className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-2xl transform group-hover:scale-105 transition-all duration-300"
+                style={{ 
+                  background: `linear-gradient(135deg, ${colors.primary}, ${colors.orange})`,
+                  boxShadow: `0 8px 32px ${colors.primary}40`
+                }}
+              >
+                <Target className="w-8 h-8 text-white" />
+              </div>
+              <div 
+                className="absolute -top-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-lg"
+                style={{ backgroundColor: colors.accent }}
+              >
+                ✓
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <span 
+                className="text-2xl font-black bg-gradient-to-r from-red-600 to-orange-500 bg-clip-text text-transparent leading-tight"
+              >
+                Skill Opportunity
+              </span>
+              <span className="text-sm font-semibold" style={{ color: colors.dark }}>
+                Engineering College
+              </span>
+            </div>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center space-x-1">
+            {/* Home */}
+            <Link
+              href="/"
+              className="flex items-center gap-2 px-5 py-3 rounded-xl transition-all duration-200 font-semibold group relative overflow-hidden"
+              style={{ color: colors.dark }}
+            >
+              <Home className="w-5 h-5" />
+              Home
+              <div 
+                className="absolute bottom-0 left-0 w-0 h-1 rounded-full transition-all duration-300 group-hover:w-full"
+                style={{ backgroundColor: colors.primary }}
+              />
+            </Link>
+
+            {/* Courses Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => toggleDropdown('courses')}
+                className="flex items-center gap-2 px-5 py-3 rounded-xl transition-all duration-200 font-semibold group relative overflow-hidden"
+                style={{ color: colors.dark }}
+              >
+                <BookOpen className="w-5 h-5" />
+                Courses
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openDropdown === 'courses' ? 'rotate-180' : ''}`} />
+                <div 
+                  className="absolute bottom-0 left-0 w-0 h-1 rounded-full transition-all duration-300 group-hover:w-full"
+                  style={{ backgroundColor: colors.secondary }}
+                />
+              </button>
+
+              {openDropdown === 'courses' && (
+                <div 
+                  className="absolute top-full left-0 mt-3 w-[600px] bg-white rounded-2xl shadow-2xl border overflow-hidden animate-in fade-in-0 zoom-in-95"
+                  style={{ borderColor: colors.light }}
+                >
+                  {/* Header */}
+                  <div 
+                    className="p-6 text-white"
+                    style={{ 
+                      background: `linear-gradient(135deg, ${colors.secondary}, ${colors.purple})`,
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <BookOpen className="w-6 h-6" />
+                      <div>
+                        <h3 className="text-xl font-bold">Our Courses</h3>
+                        <p className="text-blue-100 text-sm">Professional training programs for your career growth</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-6">
+                    {/* Quick Links */}
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                      {allCourses.map((course) => (
+                        <Link
+                          key={course.name}
+                          href={course.href}
+                          className="flex items-center gap-3 p-4 rounded-xl transition-all duration-200 group hover:shadow-lg border"
+                          style={{ 
+                            borderColor: course.color + '20',
+                            backgroundColor: course.color + '08'
+                          }}
+                          onClick={() => setOpenDropdown(null)}
+                        >
+                          <div 
+                            className="p-2 rounded-lg"
+                            style={{ backgroundColor: course.color + '20' }}
+                          >
+                            <div style={{ color: course.color }}>
+                              {course.icon}
+                            </div>
+                          </div>
+                          <span 
+                            className="font-semibold group-hover:translate-x-1 transition-transform duration-200"
+                            style={{ color: colors.dark }}
+                          >
+                            {course.name}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+
+                    {/* Categories */}
+                    <div className="space-y-6">
+                      {Object.entries(courseCategories).map(([key, category]) => (
+                        <div key={key} className="border-t border-gray-100 pt-6 first:border-t-0 first:pt-0">
+                          <div 
+                            className="flex items-center gap-3 font-bold mb-4 text-lg"
+                            style={{ color: category.color }}
+                          >
+                            <div 
+                              className="p-2 rounded-lg"
+                              style={{ backgroundColor: category.color + '20' }}
+                            >
+                              {category.icon}
+                            </div>
+                            {category.title}
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            {category.items.map((item) => (
+                              <Link
+                                key={item.name}
+                                href={item.href}
+                                className="flex items-center gap-3 p-3 rounded-lg transition-all duration-200 hover:shadow-md group"
+                                style={{ 
+                                  backgroundColor: colors.light,
+                                  border: `1px solid ${colors.light}`
+                                }}
+                                onClick={() => setOpenDropdown(null)}
+                              >
+                                <div 
+                                  className="p-1 rounded"
+                                  style={{ color: category.color }}
+                                >
+                                  {item.icon}
+                                </div>
+                                <span 
+                                  className="text-sm font-medium group-hover:translate-x-1 transition-transform duration-200"
+                                  style={{ color: colors.dark }}
+                                >
+                                  {item.name}
+                                </span>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* About */}
+            <Link
+              href="/about"
+              className="flex items-center gap-2 px-5 py-3 rounded-xl transition-all duration-200 font-semibold group relative overflow-hidden"
+              style={{ color: colors.dark }}
+            >
+              <Users className="w-5 h-5" />
+              About
+              <div 
+                className="absolute bottom-0 left-0 w-0 h-1 rounded-full transition-all duration-300 group-hover:w-full"
+                style={{ backgroundColor: colors.accent }}
+              />
+            </Link>
+
+            {/* Contact */}
+            <Link
+              href="/contact"
+              className="flex items-center gap-2 px-5 py-3 rounded-xl transition-all duration-200 font-semibold group relative overflow-hidden"
+              style={{ color: colors.dark }}
+            >
+              <Phone className="w-5 h-5" />
+              Contact
+              <div 
+                className="absolute bottom-0 left-0 w-0 h-1 rounded-full transition-all duration-300 group-hover:w-full"
+                style={{ backgroundColor: colors.purple }}
+              />
+            </Link>
+          </nav>
+
+          {/* CTA Button */}
+          <div className="hidden lg:block">
+            <Link
+              href="/courses/registration"
+              className="flex items-center gap-3 px-8 py-4 rounded-2xl font-bold text-white shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden group"
+              style={{ 
+                background: `linear-gradient(135deg, ${colors.primary}, ${colors.orange})`,
+                boxShadow: `0 8px 32px ${colors.primary}40`
+              }}
+            >
+              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+              <UserPlus className="w-5 h-5" />
+              <span className="relative">Enroll Now</span>
+              <div className="absolute -right-2 -top-2 w-4 h-4 bg-yellow-400 rounded-full animate-ping" />
+            </Link>
+          </div>
+
+          {/* Mobile menu button */}
+          <button
+            type="button"
+            className="lg:hidden p-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
+            style={{ 
+              backgroundColor: colors.primary,
+              color: 'white'
+            }}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
+          </button>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <div 
+            ref={mobileMenuRef}
+            className="lg:hidden fixed inset-0 top-32 bg-white z-40 overflow-y-auto shadow-2xl"
+            style={{ 
+              borderTop: `4px solid ${colors.primary}`,
+              background: `linear-gradient(135deg, ${colors.light} 0%, white 50%, ${colors.light} 100%)`
+            }}
+          >
+            <div className="px-6 pt-8 pb-6 space-y-2">
+              {/* Home */}
+              <Link
+                href="/"
+                className="flex items-center gap-4 p-4 rounded-2xl transition-all duration-200 font-semibold group shadow-lg hover:shadow-xl"
+                style={{ 
+                  backgroundColor: 'white',
+                  border: `2px solid ${colors.primary}20`
+                }}
+                onClick={closeMobileMenu}
+              >
+                <div 
+                  className="p-3 rounded-xl"
+                  style={{ 
+                    backgroundColor: colors.primary + '20',
+                    color: colors.primary
+                  }}
+                >
+                  <Home className="w-6 h-6" />
+                </div>
+                <span style={{ color: colors.dark }}>Home</span>
+              </Link>
+
+              {/* Mobile Courses Section */}
+              <div 
+                className="rounded-2xl shadow-lg overflow-hidden"
+                style={{ 
+                  backgroundColor: 'white',
+                  border: `2px solid ${colors.secondary}20`
+                }}
+              >
+                <button
+                  onClick={toggleMobileCourses}
+                  className="flex items-center justify-between w-full p-4 transition-all duration-200 font-semibold group"
+                  style={{ color: colors.dark }}
+                >
+                  <div className="flex items-center gap-4">
+                    <div 
+                      className="p-3 rounded-xl"
+                      style={{ 
+                        backgroundColor: colors.secondary + '20',
+                        color: colors.secondary
+                      }}
+                    >
+                      <BookOpen className="w-6 h-6" />
+                    </div>
+                    <span>Our Courses</span>
+                  </div>
+                  <ChevronDown 
+                    className={`w-5 h-5 transition-transform duration-300 ${
+                      mobileCoursesOpen ? 'rotate-180' : ''
+                    }`} 
+                    style={{ color: colors.secondary }}
+                  />
+                </button>
+
+                {/* Courses Dropdown Content */}
+                <div 
+                  className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                    mobileCoursesOpen ? 'max-h-[1200px] opacity-100' : 'max-h-0 opacity-0'
+                  }`}
+                >
+                  <div className="px-4 pb-6 space-y-6">
+                    {/* Quick Links */}
+                    <div className="grid grid-cols-1 gap-3 pt-4">
+                      {allCourses.map((course) => (
+                        <Link
+                          key={course.name}
+                          href={course.href}
+                          className="flex items-center gap-4 p-4 rounded-xl transition-all duration-200 group hover:shadow-md"
+                          style={{ 
+                            backgroundColor: course.color + '08',
+                            border: `2px solid ${course.color}20`
+                          }}
+                          onClick={closeMobileMenu}
+                        >
+                          <div 
+                            className="p-2 rounded-lg"
+                            style={{ 
+                              backgroundColor: course.color + '20',
+                              color: course.color
+                            }}
+                          >
+                            {course.icon}
+                          </div>
+                          <span 
+                            className="font-semibold flex-1"
+                            style={{ color: colors.dark }}
+                          >
+                            {course.name}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+
+                    {/* Categories */}
+                    <div className="space-y-6">
+                      {Object.entries(courseCategories).map(([key, category]) => (
+                        <div key={key} className="border-t border-gray-200 pt-6 first:border-t-0 first:pt-0">
+                          <div 
+                            className="flex items-center gap-3 font-bold mb-4 text-lg"
+                            style={{ color: category.color }}
+                          >
+                            <div 
+                              className="p-2 rounded-lg"
+                              style={{ backgroundColor: category.color + '20' }}
+                            >
+                              {category.icon}
+                            </div>
+                            {category.title}
+                          </div>
+                          <div className="space-y-2">
+                            {category.items.map((item) => (
+                              <Link
+                                key={item.name}
+                                href={item.href}
+                                className="flex items-center gap-3 p-3 rounded-lg transition-all duration-200 hover:shadow-sm group"
+                                style={{ 
+                                  backgroundColor: colors.light,
+                                  border: `1px solid ${colors.light}`
+                                }}
+                                onClick={closeMobileMenu}
+                              >
+                                <div 
+                                  className="p-1 rounded"
+                                  style={{ color: category.color }}
+                                >
+                                  {item.icon}
+                                </div>
+                                <span 
+                                  className="text-sm font-medium"
+                                  style={{ color: colors.dark }}
+                                >
+                                  {item.name}
+                                </span>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* About */}
+              <Link
+                href="/about"
+                className="flex items-center gap-4 p-4 rounded-2xl transition-all duration-200 font-semibold group shadow-lg hover:shadow-xl"
+                style={{ 
+                  backgroundColor: 'white',
+                  border: `2px solid ${colors.accent}20`
+                }}
+                onClick={closeMobileMenu}
+              >
+                <div 
+                  className="p-3 rounded-xl"
+                  style={{ 
+                    backgroundColor: colors.accent + '20',
+                    color: colors.accent
+                  }}
+                >
+                  <Users className="w-6 h-6" />
+                </div>
+                <span style={{ color: colors.dark }}>About Us</span>
+              </Link>
+
+              {/* Contact */}
+              <Link
+                href="/contact"
+                className="flex items-center gap-4 p-4 rounded-2xl transition-all duration-200 font-semibold group shadow-lg hover:shadow-xl"
+                style={{ 
+                  backgroundColor: 'white',
+                  border: `2px solid ${colors.purple}20`
+                }}
+                onClick={closeMobileMenu}
+              >
+                <div 
+                  className="p-3 rounded-xl"
+                  style={{ 
+                    backgroundColor: colors.purple + '20',
+                    color: colors.purple
+                  }}
+                >
+                  <Phone className="w-6 h-6" />
+                </div>
+                <span style={{ color: colors.dark }}>Contact Us</span>
+              </Link>
+
+              {/* Mobile CTA */}
+              <div className="pt-6">
+                <Link
+                  href="/courses/registration"
+                  className="flex items-center gap-4 justify-center p-4 rounded-2xl font-bold text-white shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden group"
+                  style={{ 
+                    background: `linear-gradient(135deg, ${colors.primary}, ${colors.orange})`,
+                    boxShadow: `0 8px 32px ${colors.primary}40`
+                  }}
+                  onClick={closeMobileMenu}
+                >
+                  <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+                  <UserPlus className="w-6 h-6" />
+                  <span className="relative">Enroll Now</span>
+                  <div className="absolute -right-2 -top-2 w-4 h-4 bg-yellow-400 rounded-full animate-ping" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Overlay */}
+        {isMenuOpen && (
+          <div 
+            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30 top-32 backdrop-blur-sm"
+            onClick={() => setIsMenuOpen(false)}
+          />
+        )}
+      </div>
+    </header>
+  );
+};
+
+export default Header;
